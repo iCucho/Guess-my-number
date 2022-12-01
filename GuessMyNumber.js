@@ -1,23 +1,23 @@
 // @ts-nocheck
 'use strict';
 
-const getNumber = function () {
+const getRandomNumber = function () {
   return Math.trunc(Math.random() * 20) + 1;
 };
 let score = 20;
 let highScore = 0;
-let randomNumber = getNumber();
+let randomNumber = getRandomNumber();
 
 const displayMessage = function (message) {
   document.querySelector('.message').textContent = message;
 };
 
-const changeBackground = function (color) {
-  document.querySelector('body').style.backgroundColor = color;
+const changeBackgroundColor = function (query, color) {
+  document.querySelector(query).style.backgroundColor = color;
 };
 
-const changeWidth = function (width) {
-  document.querySelector('.number').style.width = width;
+const changeWidth = function (query, width) {
+  document.querySelector(query).style.width = width;
 };
 
 const showCorrectNumber = function (number) {
@@ -39,8 +39,8 @@ document.querySelector('.check').addEventListener('click', function () {
   } else if (guess === randomNumber) {
     displayMessage('🎉 Correct number!');
     showCorrectNumber(randomNumber);
-    changeBackground('green');
-    changeWidth('30rem');
+    changeBackgroundColor('body', 'green');
+    changeWidth('.number', '30rem');
 
     // save highscore
     if (score > highScore) {
@@ -63,11 +63,11 @@ document.querySelector('.check').addEventListener('click', function () {
 // reload game
 document.querySelector('.again').addEventListener('click', function () {
   score = 20;
-  randomNumber = getNumber();
+  randomNumber = getRandomNumber();
   displayMessage('Start guessing...');
   showScore(score);
   showCorrectNumber('?');
   document.querySelector('.guess').value = '';
-  changeBackground('#222');
+  changeBackgroundColor('body', '#222');
   changeWidth('15rem');
 });
