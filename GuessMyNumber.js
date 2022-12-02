@@ -1,15 +1,20 @@
-// @ts-nocheck
 'use strict';
 
+// Get Randomnumber
 const getRandomNumber = function () {
-  return Math.trunc(Math.random() * 20) + 1;
+  return Math.floor(Math.random() * 20) + 1;
 };
-let score = 20;
-let highScore = 0;
 let randomNumber = getRandomNumber();
+console.log(randomNumber);
+let score = 20;
+let highscore = 0;
 
 const displayMessage = function (message) {
   document.querySelector('.message').textContent = message;
+};
+
+const showRandomNumber = function (number) {
+  document.querySelector('.number').textContent = number;
 };
 
 const changeBackgroundColor = function (query, color) {
@@ -20,37 +25,36 @@ const changeWidth = function (query, width) {
   document.querySelector(query).style.width = width;
 };
 
-const showCorrectNumber = function (number) {
-  document.querySelector('.number').textContent = number;
-};
-
 const showScore = function (score) {
   document.querySelector('.score').textContent = score;
 };
 
-document.querySelector('.check').addEventListener('click', function () {
+// when there's no valid input
+function checkHandler() {
   const guess = Number(document.querySelector('.guess').value);
 
-  // when there's no input
   if (!guess) {
-    displayMessage('⛔️ Please guess a number!');
+    displayMessage('⛔️ Please guess a number between 1 and 20');
 
     // when player wins
   } else if (guess === randomNumber) {
     displayMessage('🎉 Correct number!');
-    showCorrectNumber(randomNumber);
+    showRandomNumber(randomNumber);
     changeBackgroundColor('body', 'green');
     changeWidth('.number', '30rem');
 
     // save highscore
-    if (score > highScore) {
-      highScore = score;
-      document.querySelector('.highscore').textContent = highScore;
+    if (score > highscore) {
+      highscore = score;
+      document.querySelector('.highscore').textContent = score;
     }
-    // when guess is wrong
+
+    // when guess is incorrect
   } else if (guess !== randomNumber) {
     if (score > 1) {
-      displayMessage(guess > randomNumber ? 'Too high' : 'Too low');
+      displayMessage(
+        guess > randomNumber ? 'Too high! Try again' : 'Too low! Try again'
+      );
       score--;
       showScore(score);
     } else {
@@ -58,16 +62,19 @@ document.querySelector('.check').addEventListener('click', function () {
       document.querySelector('.score').textContent = 0;
     }
   }
-});
+}
 
-// reload game
-document.querySelector('.again').addEventListener('click', function () {
+function againHandler() {
   score = 20;
   randomNumber = getRandomNumber();
   displayMessage('Start guessing...');
   showScore(score);
-  showCorrectNumber('?');
+  showRandomNumber('?');
   document.querySelector('.guess').value = '';
   changeBackgroundColor('body', '#222');
-  changeWidth('15rem');
-});
+  changeWidth('.number', '15rem');
+}
+
+// listeners
+document.querySelector('.check').addEventListener('click', checkHandler);
+document.querySelector('.again').addEventListener('click', againHandler);
